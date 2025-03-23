@@ -4,7 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: 'film-horizon',
+  base: './',
+  base: '/film-horizon/',
   plugins: [
     react(),
     tailwindcss(),
