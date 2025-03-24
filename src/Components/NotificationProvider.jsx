@@ -10,14 +10,18 @@ export const useNotification = () => {
 
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
+  const MAX_NOTIFICATIONS = 1;
 
   const addNotification = (message, type = "success") => {
     const id = Date.now();
 
-    setNotifications((prevNotifications) => [
-      ...prevNotifications,
-      { message, type, id },
-    ]);
+    setNotifications((prevNotifications) => {
+      //Remove the oldest if max limit is reached
+      if (prevNotifications.length >= MAX_NOTIFICATIONS) {
+        return [...prevNotifications.slice(1), {message, type, id}];
+      }
+      return [...prevNotifications, {message, type, id}]
+    });
 
     setTimeout(() => {
       setNotifications((prevNotifications) =>
