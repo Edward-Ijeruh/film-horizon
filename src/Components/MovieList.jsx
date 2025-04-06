@@ -33,16 +33,12 @@ const handleNextPage = () => {
         const response = await axios.get(
           `https://api.themoviedb.org/3/search/movie?api_key=224fb7362c8a07c0e01f6fcb5bf3d178&query=${query}&page=${page}`
         );
-        if (page === 1) {
-          setMoviesList(response.data.results); // Replace movies on the first page
-        } else {
-          setMoviesList((prevMovies) => [...prevMovies, ...response.data.results]); // Append movies
-        }
+        setMoviesList(response.data.results);
       } catch (error) {
         console.error("Error fetching search results:", error);
       }
     },
-    [dispatch] // Ensure stable function reference
+    []
   );
 
   // Debounced Effect to Fetch Movies
