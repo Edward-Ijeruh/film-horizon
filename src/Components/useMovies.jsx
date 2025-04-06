@@ -10,15 +10,16 @@ const useMovies = (page) => {
 
   useEffect(() => {
     const fetchMovies = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`
         );
-        setMovies(page === 1 ? response.data.results : (prevMovies) => [...prevMovies, ...response.data.results]);
-        setTotalPages(response.data.total_pages)
-        setLoading(false);
+        setMovies(response.data.results);
+        setTotalPages(response.data.total_pages);
       } catch (error) {
         console.error("Error fetching movies:", error);
+      } finally {
         setLoading(false);
       }
     };

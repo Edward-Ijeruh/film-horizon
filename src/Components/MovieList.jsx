@@ -14,7 +14,6 @@ const MovieList = () => {
   const [isOpen, setIsOpen] = useState(false); 
   const { movies, loading, totalPages } = useMovies(currentPage); 
   const [moviesList, setMoviesList] = useState([]); 
-  const [isBottom, setIsBottom] = useState(false);
 
 //Fetch next page
 const handleNextPage = () => {
@@ -22,30 +21,6 @@ const handleNextPage = () => {
     dispatch({type: "setCurrentPage", payload: currentPage + 1});
   }
 };
-
-//Detect when to show the "More" button
-  useEffect(() => {
-    let timeout;
-
-    const handleScroll = () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        const scrollTop = document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = document.documentElement.clientHeight;
-        if (!isBottom && scrollTop + clientHeight >= scrollHeight - 100) {
-          setIsBottom(true);
-        } else if (!isBottom && scrollTop + clientHeight < scrollHeight - 100) {
-          setIsBottom(false);
-        }
-      }, 200);
-     
-    };
-    window.addEventListener("scroll", handleScroll);
-    
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
 
   const fetchMovies = useCallback(
     async (query, page = 1) => {
@@ -192,15 +167,26 @@ const handleNextPage = () => {
         </div>
       </main>
 
-      {/*Floating "More" button */}
-      {isBottom && currentPage < totalPages && (
-        <button 
-          onClick={handleNextPage}
-          className="relative bottom-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-10 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg transition duration-300 cursor-pointer hover:scale-105 w-24 sm:w-24"
-        >
-          More
-        </button>
-      )}
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center space-x-4 mt-8">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => dispatch({type: "setCurrentPage", payload: currentPage - 1})}
+              className="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-900 disabled:opacity-50"
+            >
+              Prev
+            </button>
+
+            <span className="text-white text-lg">{currentPage}</span>
+
+            <button 
+              disabled={currentPage === totalPages}
+              onClick={() => dispatch({type: "setCurrentPage", payload: currentPage + 1})}
+              className="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-900 disabled:opacity-50"
+            >
+              Next
+            </button>
+      </div>
 
       {/* Footer */} 
       <footer className="bg-gray-800 text-white text-center py-4 mt-8"> <p>&copy; 2025 FilmHorizon. All rights reserved.</p> </footer>
