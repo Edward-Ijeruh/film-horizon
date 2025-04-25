@@ -6,6 +6,7 @@ import heroImage from "../assets/heroimg.jpg";
 import posterFallback from "../assets/posterimg-fallback.jpg";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { WatchlistContext } from "./WatchlistProvider";
+import logo from "../assets/filmhorizon_icon-removebg.png";
 
 //Acces global state
 const MovieList = () => {
@@ -63,11 +64,7 @@ const MovieList = () => {
             to="/"
             className="text-2xl font-bold text-red-600 flex items-center"
           >
-            <img
-              src="/src/assets/filmhorizon_icon-removebg.png"
-              alt="FilmHorizon Logo"
-              className="w-8 h-8 mr-2"
-            />
+            <img src={logo} alt="FilmHorizon Logo" className="w-8 h-8 mr-2" />
             <span>FilmHorizon</span>
           </Link>
 
