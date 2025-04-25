@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { WatchlistContext } from "./WatchlistProvider";
@@ -9,7 +9,7 @@ import castFallback from "../assets/cast-fallback4.jpg";
 const MovieDetail = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
-  const {state, dispatch} = useContext(WatchlistContext);
+  const { state, dispatch } = useContext(WatchlistContext);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const navigate = useNavigate();
   const { addNotification } = useNotification();
@@ -17,7 +17,7 @@ const MovieDetail = () => {
   useEffect(() => {
     const fetchMovieDetail = async () => {
       const response = await axios.get(
-        `https://api.themoviedb.org/3/movie/${id}?api_key=224fb7362c8a07c0e01f6fcb5bf3d178&append_to_response=credits`
+        `https://api.themoviedb.org/3/movie/${id}?api_key=224fb7362c8a07c0e01f6fcb5bf3d178&append_to_response=credits`,
       );
       setMovie(response.data);
     };
@@ -26,7 +26,7 @@ const MovieDetail = () => {
 
   useEffect(() => {
     if (movie) {
-      setIsInWatchlist(state.watchlist.some((m) => m.id === movie.id))
+      setIsInWatchlist(state.watchlist.some((m) => m.id === movie.id));
     }
   }, [movie, state.watchlist]);
 
@@ -36,15 +36,21 @@ const MovieDetail = () => {
 
   const toggleWatchlist = () => {
     if (isInWatchlist) {
-      dispatch({type: 'removeMovie', payload: {id: movie.id}});
+      dispatch({ type: "removeMovie", payload: { id: movie.id } });
       addNotification(`${movie.title} removed from watchlist`, "error");
     } else {
-      dispatch({type: 'addMovie', payload: {id: movie.id, title: movie.title, poster_path: movie.poster_path}});
+      dispatch({
+        type: "addMovie",
+        payload: {
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+        },
+      });
       addNotification(`${movie.title} added to watchlist`, "success");
     }
     setIsInWatchlist(!isInWatchlist);
   };
-  
 
   if (!movie) return <div className="text-white text-xl">Loading...</div>;
 
@@ -55,7 +61,7 @@ const MovieDetail = () => {
         onClick={handleBack}
         className="p-3 rounded-full bg-gray-800 text-white shadow-md fixed top-6 left-6 z-10 hover:bg-gray-700 transition-colors"
       >
-         <svg
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -77,12 +83,14 @@ const MovieDetail = () => {
             {/* Movie Poster */}
             <div className="md:w-1/3">
               <img
-                src={movie.poster_path 
-                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` 
-                  : `${posterFallback}`}
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : `${posterFallback}`
+                }
                 alt={movie.title}
                 className="w-full h-auto rounded-lg shadow-lg"
-                onError={(e) => (e.target.src = {posterFallback})}
+                onError={(e) => (e.target.src = { posterFallback })}
               />
             </div>
 
@@ -135,12 +143,14 @@ const MovieDetail = () => {
                 {movie.credits.cast.slice(0, 8).map((actor) => (
                   <div key={actor.id} className="text-center">
                     <img
-                      src={actor.profile_path 
-                        ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` 
-                        : `${castFallback}`}
+                      src={
+                        actor.profile_path
+                          ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
+                          : `${castFallback}`
+                      }
                       alt={actor.name}
                       className="w-x h-48 mx-auto rounded-lg shadow-md"
-                      onError={(e) => (e.target.src = {castFallback})}
+                      onError={(e) => (e.target.src = { castFallback })}
                     />
                     <p className="text-gray-300 mt-2">{actor.name}</p>
                     <p className="text-gray-400 text-sm">{actor.character}</p>
@@ -171,7 +181,6 @@ const MovieDetail = () => {
                   d="M12 21l-8-8a5 5 0 010-7 5 5 0 017 0 5 5 0 017 0 5 5 0 010 7l-8 8z"
                 />
               </svg>
-
             </button>
           </div>
         </div>
